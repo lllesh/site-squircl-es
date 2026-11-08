@@ -1,0 +1,404 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #551122;
+  --bg-2: #6b1c2d;
+  --ink: #cca476;
+  --ink-soft: #cca476;
+  --line: rgba(204,164,118,.3);
+  --accent: #cca476;
+}
+
+:root[data-theme="light"] {
+  --bg: #f7f1e6;
+  --bg-2: #efe6d4;
+  --ink: #8a6f4b;
+  --ink-soft: #8a6f4b;
+  --line: rgba(138,111,75,.3);
+  --accent: #8a6f4b;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  min-height: 100dvh;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'EB Garamond', Georgia, serif;
+  letter-spacing: 0.015em;
+  overflow-x: hidden;
+  transition: background .25s ease, color .25s ease;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* Fixed corner icon buttons (back / theme) */
+.icon-btn {
+  position: fixed;
+  top: max(20px, calc(env(safe-area-inset-top) + 14px));
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 60;
+  transition: transform .2s, opacity .2s;
+}
+.icon-btn:hover { transform: translateY(-1px); opacity: .75; }
+.icon-btn svg { width: 20px; height: 20px; display: block; transition: opacity .2s ease; }
+.icon-btn.spin { animation: spin-once .45s ease; }
+@keyframes spin-once {
+  from { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(160deg) translateY(-2px); }
+  to { transform: rotate(360deg) translateY(0); }
+}
+
+.icon-btn--back { left: max(20px, calc(env(safe-area-inset-left) + 14px)); }
+.icon-btn--theme { right: max(20px, calc(env(safe-area-inset-right) + 14px)); }
+
+.top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  padding: 48px 6vw 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.wordmark {
+  font-size: 30px;
+  letter-spacing: 0.04em;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.wordmark small {
+  display: block;
+  font-style: normal;
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.count {
+  font-size: 16px;
+  color: var(--ink-soft);
+  font-style: normal;
+}
+
+/* Index grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 36px 28px;
+  padding: 40px 6vw 80px;
+}
+
+.card {
+  display: block;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  transition: transform .35s ease, border-color .35s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--ink);
+}
+
+.card .cover {
+  aspect-ratio: 4 / 3;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--bg-2);
+  box-shadow: 0 10px 24px -14px rgba(0,0,0,.6);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.card .cover img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .5s ease;
+}
+.card:hover .cover img {
+  transform: scale(1.06);
+}
+
+.card .meta { padding-top: 14px; text-align: center; }
+.card .name {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+.card .sub {
+  font-size: 14px;
+  color: var(--ink-soft);
+  letter-spacing: .02em;
+  margin-top: 2px;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.empty {
+  padding: 80px 6vw;
+  text-align: center;
+  color: var(--ink-soft);
+  font-style: normal;
+  font-size: 22px;
+}
+
+/* Detail page */
+.hero {
+  padding: 130px 6vw 40px;
+  text-align: center;
+}
+.hero .specimen {
+  display: inline-block;
+  max-width: 100%;
+  font-size: clamp(60px, 11vw, 168px);
+  line-height: 0.95;
+  color: var(--ink);
+  word-break: break-word;
+  white-space: nowrap;
+  visibility: hidden;
+}
+.hero .specimen.fitted {
+  visibility: visible;
+}
+.hero .tagline {
+  margin-top: 18px;
+  padding: 0 12%;
+  font-style: normal;
+  font-size: 22px;
+  color: var(--ink-soft);
+}
+
+.info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  justify-content: center;
+  gap: 24px;
+  padding: 32px 6vw;
+  text-align: center;
+}
+.info .label {
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.info .value { font-size: 19px; color: var(--ink); }
+
+.desc {
+  padding: 32px 6vw 48px;
+  max-width: 760px;
+  margin: 0 auto;
+  font-size: 20px;
+  line-height: 1.5;
+  letter-spacing: 0.015em;
+  color: var(--ink);
+  text-align: justify;
+}
+
+.credit {
+  text-align: center;
+  padding: 0 6vw 60px;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  padding: 40px 6vw 90px;
+}
+.gallery a {
+  display: block;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 24px -14px rgba(0,0,0,.6);
+}
+.gallery img {
+  width: 100%; display: block;
+  transition: transform .4s ease;
+}
+.gallery a:hover img { transform: scale(1.03); }
+
+@media (max-width: 640px) {
+  .top { padding: 84px 5vw 20px; }
+  .hero { padding: 130px 6vw 32px; }
+  .gallery { grid-template-columns: 1fr; }
+}
+
+/* acervo de vídeos (duplicado do 2026.cards): fundo preto, o vídeo no lugar da capa, toque = copia o link */
+:root { --bg: #000000; --bg-2: #141414; }
+.card { cursor: pointer; position: relative; }
+.card .cover video { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+.card:hover .cover video { transform: scale(1.06); }
+.card .copiar { display: inline-block; margin-top: 10px; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink); transition: background .2s, color .2s; }
+.card:hover .copiar { background: var(--ink); color: var(--bg); }
+.card.copiado .copiar { background: var(--ink); color: var(--bg); }
+#aviso { position: fixed; left: 50%; bottom: calc(28px + env(safe-area-inset-bottom)); transform: translate(-50%, 20px); padding: 14px 26px; border-radius: 999px; background: var(--ink); color: var(--bg); font-size: 14px; letter-spacing: .2em; text-transform: uppercase; opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; z-index: 80; }
+#aviso.on { opacity: 1; transform: translate(-50%, 0); }
+.enviar { display: inline-block; margin-top: 18px; padding: 10px 22px; border: 1px solid var(--line); border-radius: 999px; font: inherit; font-size: 13px; letter-spacing: .24em; text-transform: uppercase; color: var(--ink); background: transparent; cursor: pointer; }
+.enviar:hover { border-color: var(--ink); }
+#soltar { position: fixed; inset: 0; z-index: 90; display: none; place-items: center; background: rgba(0,0,0,.82); color: var(--ink); font-size: clamp(28px, 5vw, 56px); letter-spacing: .06em; border: 2px dashed var(--ink); }
+#soltar.on { display: grid; }
+.subindo .cover { display: grid; place-items: center; font-size: 15px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
+.subindo .barra { position: absolute; left: 14px; right: 14px; bottom: 14px; height: 3px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.subindo .barra i { display: block; height: 100%; width: 0; background: var(--ink); transition: width .2s; }
+.card .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* fonte mais grossa: Inter Tight (a família dos sites V È E N U S) */
+html, body, .enviar, #aviso { font-family: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif; }
+body { letter-spacing: 0; }
+.wordmark { font-weight: 800; letter-spacing: -.02em; }
+.wordmark small { font-weight: 700; }
+.card .name { font-weight: 700; letter-spacing: -.01em; font-size: 22px; }
+.card .sub { font-weight: 500; }
+.card .copiar, .enviar, #aviso { font-weight: 700; }
+.credit { font-weight: 500; }
+
+
+/* SQUIRCLE (como a imagem da Dra Lê): tudo preenchido, nada só com contorno */
+:root { --squircle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M100.00 50.00 L99.95 65.28 L99.81 70.63 L99.58 74.57 L99.25 77.78 L98.83 80.53 L98.31 82.93 L97.69 85.07 L96.97 86.99 L96.14 88.72 L95.21 90.30 L94.17 91.72 L93.01 93.01 L91.72 94.17 L90.30 95.21 L88.72 96.14 L86.99 96.97 L85.07 97.69 L82.93 98.31 L80.53 98.83 L77.78 99.25 L74.57 99.58 L70.63 99.81 L65.28 99.95 L50.00 100.00 L34.72 99.95 L29.37 99.81 L25.43 99.58 L22.22 99.25 L19.47 98.83 L17.07 98.31 L14.93 97.69 L13.01 96.97 L11.28 96.14 L9.70 95.21 L8.28 94.17 L6.99 93.01 L5.83 91.72 L4.79 90.30 L3.86 88.72 L3.03 86.99 L2.31 85.07 L1.69 82.93 L1.17 80.53 L0.75 77.78 L0.42 74.57 L0.19 70.63 L0.05 65.28 L0.00 50.00 L0.05 34.72 L0.19 29.37 L0.42 25.43 L0.75 22.22 L1.17 19.47 L1.69 17.07 L2.31 14.93 L3.03 13.01 L3.86 11.28 L4.79 9.70 L5.83 8.28 L6.99 6.99 L8.28 5.83 L9.70 4.79 L11.28 3.86 L13.01 3.03 L14.93 2.31 L17.07 1.69 L19.47 1.17 L22.22 0.75 L25.43 0.42 L29.37 0.19 L34.72 0.05 L50.00 0.00 L65.28 0.05 L70.63 0.19 L74.57 0.42 L77.78 0.75 L80.53 1.17 L82.93 1.69 L85.07 2.31 L86.99 3.03 L88.72 3.86 L90.30 4.79 L91.72 5.83 L93.01 6.99 L94.17 8.28 L95.21 9.70 L96.14 11.28 L96.97 13.01 L97.69 14.93 L98.31 17.07 L98.83 19.47 L99.25 22.22 L99.58 25.43 L99.81 29.37 L99.95 34.72Z' fill='black'/%3E%3C/svg%3E"); }
+.card, .card .cover, .card .copiar, .enviar, .icon-btn--theme, #aviso {
+  -webkit-mask: var(--squircle) center / 100% 100% no-repeat; mask: var(--squircle) center / 100% 100% no-repeat;
+  border: 0 !important; border-radius: 0 !important;
+}
+.card { background: var(--bg-2); padding: 18px 18px 22px; }
+.card:hover { border-color: transparent; background: #1c1c1c; }
+.card .cover { box-shadow: none; }
+.card .copiar { background: var(--ink); color: var(--bg); padding: 10px 20px; }
+.card:hover .copiar, .card.copiado .copiar { background: #e6c08f; color: var(--bg); }
+.enviar { background: var(--ink); color: var(--bg); padding: 13px 26px; }
+.enviar:hover { background: #e6c08f; }
+.icon-btn--theme { background: var(--bg-2); width: 44px; height: 44px; }
+#aviso { padding: 16px 30px; }
+:root[data-theme="light"] .card:hover { background: #e8dcc6; }
+
+/* o título "vids" na fonte da Dra Lê: CF Bernados (só no título) */
+@font-face { font-family: 'CF Bernados'; src: url('fonts/CFBernados-Regular.woff2') format('woff2'), url('fonts/CFBernados-Regular.woff') format('woff'); font-weight: 400; font-display: swap; }
+.wordmark { font-family: 'CF Bernados', 'Inter Tight', sans-serif; font-weight: 400; font-size: clamp(64px, 10vw, 128px); line-height: .9; letter-spacing: .01em; }
+.top { padding-top: 56px; gap: 22px; }
+
+/* o pontinho brilhante (no lugar do sol e da lua): mostra a próxima cor, com glow */
+#ponto { position: fixed; top: max(26px, calc(env(safe-area-inset-top) + 20px)); right: max(26px, calc(env(safe-area-inset-right) + 20px)); z-index: 60; width: 18px; height: 18px; padding: 0; border: 0; border-radius: 50%; cursor: pointer; background: var(--ponto, #cca476); box-shadow: 0 0 8px 2px var(--ponto, #cca476), 0 0 22px 6px color-mix(in srgb, var(--ponto, #cca476) 55%, transparent); animation: brilho 2.4s ease-in-out infinite; }
+#ponto:hover { filter: brightness(1.15); }
+@keyframes brilho { 0%, 100% { box-shadow: 0 0 8px 2px var(--ponto, #cca476), 0 0 22px 6px color-mix(in srgb, var(--ponto, #cca476) 55%, transparent) } 50% { box-shadow: 0 0 12px 3px var(--ponto, #cca476), 0 0 34px 10px color-mix(in srgb, var(--ponto, #cca476) 45%, transparent) } }
+@media (prefers-reduced-motion: reduce) { #ponto { animation: none } }
+body, .top { transition: background .35s ease, color .35s ease; }
+
+/* pedidos da Dra Lê: cartão de trás mais visível; botões = retângulo preenchido com cantos bem arredondados */
+:root { --bg-2: #262626; }
+.card:hover { background: color-mix(in srgb, var(--bg-2) 85%, #fff); }
+.card .copiar, .enviar {
+  -webkit-mask: none !important; mask: none !important;
+  border-radius: 14px !important; border: 0 !important;
+  background: var(--ink); color: var(--bg);
+}
+.card .copiar { padding: 11px 24px; }
+.enviar { padding: 15px 30px; }
+
+/* título um pouco maior; enviar = squircle pequenino com o + dentro */
+.wordmark { font-size: clamp(80px, 12.5vw, 160px); }
+.enviar {
+  -webkit-mask: var(--squircle) center / 100% 100% no-repeat !important; mask: var(--squircle) center / 100% 100% no-repeat !important;
+  border-radius: 0 !important; width: 46px; height: 46px; padding: 0 !important;
+  display: grid; place-items: center; font-size: 26px; font-weight: 700; line-height: 1; letter-spacing: 0;
+}
+
+/* sem a linha embaixo do título; o título é o que troca a cor */
+.top { border-bottom: 0 !important; }
+#titulo { cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; outline: none; }
+#titulo:focus-visible { text-decoration: underline; text-underline-offset: .12em; }
+
+/* VIDS: cada letra dentro de um squircle preenchido; o squircle preto e a letra na cor do fundo da página
+   (no fundo preto o squircle fica dourado, senão sumiria) */
+#titulo { display: flex; gap: clamp(8px, 1.2vw, 16px); font-size: clamp(56px, 8.4vw, 108px); line-height: 1; }
+#titulo span {
+  display: grid; place-items: center; width: 1.18em; height: 1.18em; padding-top: .06em;
+  background: var(--quadro, #000); color: var(--bg);
+  -webkit-mask: var(--squircle) center / 100% 100% no-repeat; mask: var(--squircle) center / 100% 100% no-repeat;
+}
+:root { --quadro: #cca476; }
+.enviar[hidden] { display: none !important; }
+
+/* o "+" flutuando: squircle igual às letras do VIDS, passeando devagar */
+#flutua { position: fixed; z-index: 70; width: 60px; height: 60px; padding: 0; border: 0; background: transparent; cursor: grab; touch-action: none; filter: drop-shadow(0 8px 14px rgba(0,0,0,.35)); }
+#flutua span { display: grid; place-items: center; width: 100%; height: 100%; background: var(--quadro, #cca476); color: var(--bg); font: 700 34px/1 'Inter Tight', sans-serif; padding-bottom: 3px;
+  -webkit-mask: var(--squircle) center / 100% 100% no-repeat; mask: var(--squircle) center / 100% 100% no-repeat;
+  animation: passeia 7s ease-in-out infinite; }
+#flutua.segurando { cursor: grabbing; }
+#flutua.segurando span { animation-play-state: paused; transform: scale(1.08) rotate(-4deg); }
+@keyframes passeia {
+  0% { transform: translate(0, 0) rotate(-9deg) } 20% { transform: translate(11px, -10px) rotate(-3deg) } 40% { transform: translate(34px, 2px) rotate(-10deg) }
+  60% { transform: translate(22px, 16px) rotate(-5deg) } 80% { transform: translate(8px, 14px) rotate(-12deg) } 100% { transform: translate(0, 0) rotate(-9deg) }
+}
+@media (prefers-reduced-motion: reduce) { #flutua span { animation: none } }
+
+/* o "+" no mesmo formato dos squircles do VIDS: reto, sem girar (só passeia) */
+@keyframes passeia {
+  0% { transform: translate(0, 0) } 20% { transform: translate(6px, 5px) } 40% { transform: translate(14px, 1px) }
+  60% { transform: translate(10px, 9px) } 80% { transform: translate(3px, 8px) } 100% { transform: translate(0, 0) }
+}
+#flutua.segurando span { transform: scale(1.06); }
+#flutua { width: 64px; height: 64px; }
+#flutua span { font-size: 36px; }
+
+
+/* squircle com o arredondado EXATO da imagem da Dra Lê (medido: n = 3,5) em tudo */
+:root { --squircle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M100.00 50.00 L99.96 59.35 L99.84 63.86 L99.65 67.43 L99.38 70.48 L99.02 73.20 L98.59 75.66 L98.09 77.91 L97.50 79.99 L96.83 81.92 L96.08 83.72 L95.24 85.40 L94.33 86.97 L93.33 88.43 L92.24 89.79 L91.06 91.06 L89.79 92.24 L88.43 93.33 L86.97 94.33 L85.40 95.24 L83.72 96.08 L81.92 96.83 L79.99 97.50 L77.91 98.09 L75.66 98.59 L73.20 99.02 L70.48 99.38 L67.43 99.65 L63.86 99.84 L59.35 99.96 L50.00 100.00 L40.65 99.96 L36.14 99.84 L32.57 99.65 L29.52 99.38 L26.80 99.02 L24.34 98.59 L22.09 98.09 L20.01 97.50 L18.08 96.83 L16.28 96.08 L14.60 95.24 L13.03 94.33 L11.57 93.33 L10.21 92.24 L8.94 91.06 L7.76 89.79 L6.67 88.43 L5.67 86.97 L4.76 85.40 L3.92 83.72 L3.17 81.92 L2.50 79.99 L1.91 77.91 L1.41 75.66 L0.98 73.20 L0.62 70.48 L0.35 67.43 L0.16 63.86 L0.04 59.35 L0.00 50.00 L0.04 40.65 L0.16 36.14 L0.35 32.57 L0.62 29.52 L0.98 26.80 L1.41 24.34 L1.91 22.09 L2.50 20.01 L3.17 18.08 L3.92 16.28 L4.76 14.60 L5.67 13.03 L6.67 11.57 L7.76 10.21 L8.94 8.94 L10.21 7.76 L11.57 6.67 L13.03 5.67 L14.60 4.76 L16.28 3.92 L18.08 3.17 L20.01 2.50 L22.09 1.91 L24.34 1.41 L26.80 0.98 L29.52 0.62 L32.57 0.35 L36.14 0.16 L40.65 0.04 L50.00 0.00 L59.35 0.04 L63.86 0.16 L67.43 0.35 L70.48 0.62 L73.20 0.98 L75.66 1.41 L77.91 1.91 L79.99 2.50 L81.92 3.17 L83.72 3.92 L85.40 4.76 L86.97 5.67 L88.43 6.67 L89.79 7.76 L91.06 8.94 L92.24 10.21 L93.33 11.57 L94.33 13.03 L95.24 14.60 L96.08 16.28 L96.83 18.08 L97.50 20.01 L98.09 22.09 L98.59 24.34 L99.02 26.80 L99.38 29.52 L99.65 32.57 L99.84 36.14 L99.96 40.65Z' fill='black'/%3E%3C/svg%3E"); }
+/* título: squircles menores e mais juntinhos */
+#titulo { gap: clamp(4px, .5vw, 7px); font-size: clamp(40px, 5.4vw, 70px); }
+#titulo span { width: 1.14em; height: 1.14em; }
+/* sem o botão copiar: tocar (ou segurar) no cartão copia o link */
+.card .copiar { display: none !important; }
+.card .meta { padding-bottom: 6px; }
+
+/* mais respiro em cima do título (a distância do título até os cartões fica a mesma) */
+.top { padding-top: clamp(96px, 14vh, 150px) !important; }
+/* o "+" bem menor, estacionado no canto de cima à esquerda */
+#flutua { width: 38px; height: 38px; filter: drop-shadow(0 5px 9px rgba(0,0,0,.3)); }
+#flutua span { font-size: 22px; padding-bottom: 2px; }
+
+/* b.vids: mais respiro em cima do título (pedido da Dra Lê) */
+.top { padding-top: clamp(160px, 24vh, 250px) !important; }
+
+
+/* c.vids: o squircle dos cartões igual ao do videos.boooo.uk (mesmo formato e mesmo tamanho) */
+:root { --squircle-videos: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M100.00 50.00 L99.95 65.28 L99.81 70.63 L99.58 74.57 L99.25 77.78 L98.83 80.53 L98.31 82.93 L97.69 85.07 L96.97 86.99 L96.14 88.72 L95.21 90.30 L94.17 91.72 L93.01 93.01 L91.72 94.17 L90.30 95.21 L88.72 96.14 L86.99 96.97 L85.07 97.69 L82.93 98.31 L80.53 98.83 L77.78 99.25 L74.57 99.58 L70.63 99.81 L65.28 99.95 L50.00 100.00 L34.72 99.95 L29.37 99.81 L25.43 99.58 L22.22 99.25 L19.47 98.83 L17.07 98.31 L14.93 97.69 L13.01 96.97 L11.28 96.14 L9.70 95.21 L8.28 94.17 L6.99 93.01 L5.83 91.72 L4.79 90.30 L3.86 88.72 L3.03 86.99 L2.31 85.07 L1.69 82.93 L1.17 80.53 L0.75 77.78 L0.42 74.57 L0.19 70.63 L0.05 65.28 L0.00 50.00 L0.05 34.72 L0.19 29.37 L0.42 25.43 L0.75 22.22 L1.17 19.47 L1.69 17.07 L2.31 14.93 L3.03 13.01 L3.86 11.28 L4.79 9.70 L5.83 8.28 L6.99 6.99 L8.28 5.83 L9.70 4.79 L11.28 3.86 L13.01 3.03 L14.93 2.31 L17.07 1.69 L19.47 1.17 L22.22 0.75 L25.43 0.42 L29.37 0.19 L34.72 0.05 L50.00 0.00 L65.28 0.05 L70.63 0.19 L74.57 0.42 L77.78 0.75 L80.53 1.17 L82.93 1.69 L85.07 2.31 L86.99 3.03 L88.72 3.86 L90.30 4.79 L91.72 5.83 L93.01 6.99 L94.17 8.28 L95.21 9.70 L96.14 11.28 L96.97 13.01 L97.69 14.93 L98.31 17.07 L98.83 19.47 L99.25 22.22 L99.58 25.43 L99.81 29.37 L99.95 34.72Z' fill='black'/%3E%3C/svg%3E"); }
+.card, .card .cover { -webkit-mask: var(--squircle-videos) center / 100% 100% no-repeat !important; mask: var(--squircle-videos) center / 100% 100% no-repeat !important; }
+.card { padding-bottom: 61px !important; }
+
+/* d.vids: cartões mais largos, altura = largura (quadrados), mesmo squircle do videos.boooo.uk */
+.grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.card { aspect-ratio: 1 / 1; display: flex; flex-direction: column; padding-bottom: 26px !important; }
+.card .cover { flex: 1 1 auto; min-height: 0; aspect-ratio: auto; }
+.card .meta { flex: none; }
+
+
+/* e.vids: o "+" mais fofinho (cantos mais arredondados) */
+#flutua span { -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M100.00 50.00 L99.95 55.62 L99.80 59.39 L99.54 62.65 L99.19 65.62 L98.73 68.37 L98.18 70.95 L97.52 73.38 L96.76 75.68 L95.90 77.86 L94.95 79.92 L93.89 81.88 L92.74 83.73 L91.48 85.48 L90.13 87.13 L88.68 88.68 L87.13 90.13 L85.48 91.48 L83.73 92.74 L81.88 93.89 L79.92 94.95 L77.86 95.90 L75.68 96.76 L73.38 97.52 L70.95 98.18 L68.37 98.73 L65.62 99.19 L62.65 99.54 L59.39 99.80 L55.62 99.95 L50.00 100.00 L44.38 99.95 L40.61 99.80 L37.35 99.54 L34.38 99.19 L31.63 98.73 L29.05 98.18 L26.62 97.52 L24.32 96.76 L22.14 95.90 L20.08 94.95 L18.12 93.89 L16.27 92.74 L14.52 91.48 L12.87 90.13 L11.32 88.68 L9.87 87.13 L8.52 85.48 L7.26 83.73 L6.11 81.88 L5.05 79.92 L4.10 77.86 L3.24 75.68 L2.48 73.38 L1.82 70.95 L1.27 68.37 L0.81 65.62 L0.46 62.65 L0.20 59.39 L0.05 55.62 L0.00 50.00 L0.05 44.38 L0.20 40.61 L0.46 37.35 L0.81 34.38 L1.27 31.63 L1.82 29.05 L2.48 26.62 L3.24 24.32 L4.10 22.14 L5.05 20.08 L6.11 18.12 L7.26 16.27 L8.52 14.52 L9.87 12.87 L11.32 11.32 L12.87 9.87 L14.52 8.52 L16.27 7.26 L18.12 6.11 L20.08 5.05 L22.14 4.10 L24.32 3.24 L26.62 2.48 L29.05 1.82 L31.63 1.27 L34.38 0.81 L37.35 0.46 L40.61 0.20 L44.38 0.05 L50.00 0.00 L55.62 0.05 L59.39 0.20 L62.65 0.46 L65.62 0.81 L68.37 1.27 L70.95 1.82 L73.38 2.48 L75.68 3.24 L77.86 4.10 L79.92 5.05 L81.88 6.11 L83.73 7.26 L85.48 8.52 L87.13 9.87 L88.68 11.32 L90.13 12.87 L91.48 14.52 L92.74 16.27 L93.89 18.12 L94.95 20.08 L95.90 22.14 L96.76 24.32 L97.52 26.62 L98.18 29.05 L98.73 31.63 L99.19 34.38 L99.54 37.35 L99.80 40.61 L99.95 44.38Z' fill='black'/%3E%3C/svg%3E") center / 100% 100% no-repeat !important; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M100.00 50.00 L99.95 55.62 L99.80 59.39 L99.54 62.65 L99.19 65.62 L98.73 68.37 L98.18 70.95 L97.52 73.38 L96.76 75.68 L95.90 77.86 L94.95 79.92 L93.89 81.88 L92.74 83.73 L91.48 85.48 L90.13 87.13 L88.68 88.68 L87.13 90.13 L85.48 91.48 L83.73 92.74 L81.88 93.89 L79.92 94.95 L77.86 95.90 L75.68 96.76 L73.38 97.52 L70.95 98.18 L68.37 98.73 L65.62 99.19 L62.65 99.54 L59.39 99.80 L55.62 99.95 L50.00 100.00 L44.38 99.95 L40.61 99.80 L37.35 99.54 L34.38 99.19 L31.63 98.73 L29.05 98.18 L26.62 97.52 L24.32 96.76 L22.14 95.90 L20.08 94.95 L18.12 93.89 L16.27 92.74 L14.52 91.48 L12.87 90.13 L11.32 88.68 L9.87 87.13 L8.52 85.48 L7.26 83.73 L6.11 81.88 L5.05 79.92 L4.10 77.86 L3.24 75.68 L2.48 73.38 L1.82 70.95 L1.27 68.37 L0.81 65.62 L0.46 62.65 L0.20 59.39 L0.05 55.62 L0.00 50.00 L0.05 44.38 L0.20 40.61 L0.46 37.35 L0.81 34.38 L1.27 31.63 L1.82 29.05 L2.48 26.62 L3.24 24.32 L4.10 22.14 L5.05 20.08 L6.11 18.12 L7.26 16.27 L8.52 14.52 L9.87 12.87 L11.32 11.32 L12.87 9.87 L14.52 8.52 L16.27 7.26 L18.12 6.11 L20.08 5.05 L22.14 4.10 L24.32 3.24 L26.62 2.48 L29.05 1.82 L31.63 1.27 L34.38 0.81 L37.35 0.46 L40.61 0.20 L44.38 0.05 L50.00 0.00 L55.62 0.05 L59.39 0.20 L62.65 0.46 L65.62 0.81 L68.37 1.27 L70.95 1.82 L73.38 2.48 L75.68 3.24 L77.86 4.10 L79.92 5.05 L81.88 6.11 L83.73 7.26 L85.48 8.52 L87.13 9.87 L88.68 11.32 L90.13 12.87 L91.48 14.52 L92.74 16.27 L93.89 18.12 L94.95 20.08 L95.90 22.14 L96.76 24.32 L97.52 26.62 L98.18 29.05 L98.73 31.63 L99.19 34.38 L99.54 37.35 L99.80 40.61 L99.95 44.38Z' fill='black'/%3E%3C/svg%3E") center / 100% 100% no-repeat !important; }

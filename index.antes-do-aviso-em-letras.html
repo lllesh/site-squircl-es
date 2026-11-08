@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<script src="/porta.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>(function(){try{var c=localStorage.getItem("vids-cor");if(c)document.documentElement.setAttribute("data-cor",c)}catch(e){}})();</script>
+<title>vids</title>
+<meta name="description" content="vids: toque no vídeo e o link é copiado.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<meta property="og:title" content="vids">
+<meta property="og:url" content="https://g.vids.boooo.uk/">
+<meta property="og:image" content="https://g.vids.boooo.uk/assets/icons/icon-512.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+
+
+<div class="top">
+  <div class="wordmark" id="titulo" role="button" tabindex="0" title="trocar a cor" aria-label="VIDS"><span>V</span><span>I</span><span>D</span><span>S</span></div>
+  <button class="enviar" id="enviar" type="button" aria-label="enviar vídeos" title="enviar vídeos" hidden>+</button>
+  <input type="file" id="arquivos" accept="video/*" multiple hidden>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="credit" id="count"></div>
+<button id="flutua" type="button" aria-label="enviar vídeos" title="enviar vídeos — arraste para mudar de lugar"><span><i class="pontinho"></i></span></button>
+<div id="aviso">link copiado</div>
+<div id="soltar">solte os vídeos aqui</div>
+
+<script>
+(function () {
+  function chave() { try { return localStorage.getItem('porta-chave') || '' } catch (e) { return '' } }
+  function api(o) { o = o || {}; o.headers = Object.assign({ 'x-edit-key': chave(), 'Content-Type': 'application/json' }, o.headers || {}); o.cache = 'no-store'; return fetch('/api/videos', o) }
+  var grid = document.getElementById('grid'), aviso = document.getElementById('aviso'), t = 0;
+  function mb(n) { return (n / 1048576).toFixed(n < 10485760 ? 1 : 0).replace('.', ',') + ' mb' }
+  function dia(s) { var d = new Date(s); return isNaN(d) ? '' : d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' }).replace('.', '') }
+  function nome(k) { var n = k.split('/').pop().replace(/\.[^.]+$/, '').replace(/-[a-z0-9]{7,9}$/, ''); return n.replace(/[-_]+/g, ' ') }
+  function avisa(txt) { aviso.textContent = txt; aviso.classList.add('on'); clearTimeout(t); t = setTimeout(function () { aviso.classList.remove('on') }, 1600) }
+  function copia(url, card) {
+    function ok() { avisa('link copiado'); card.classList.add('copiado'); setTimeout(function () { card.classList.remove('copiado') }, 1400) }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, sobra); else sobra();
+    function sobra() { var i = document.createElement('textarea'); i.value = url; document.body.appendChild(i); i.select(); try { document.execCommand('copy'); ok() } catch (e) { avisa('não copiou') } i.remove() }
+  }
+  function cartao(v, i) {
+    var a = document.createElement('div'); a.className = 'card'; a.style.animationDelay = (i * .04) + 's'; a.title = v.url;
+    a.innerHTML = '<div class="cover"><video muted loop playsinline preload="metadata"></video></div><div class="meta"><div class="name"></div><div class="sub"></div></div>';
+    var vid = a.querySelector('video'); vid.src = v.url + '#t=0.5';
+    a.querySelector('.name').textContent = nome(v.chave);
+    a.querySelector('.sub').textContent = mb(v.tamanho) + (dia(v.data) ? ' · ' + dia(v.data) : '');
+    a.addEventListener('mouseenter', function () { vid.play().catch(function () {}) });
+    a.addEventListener('mouseleave', function () { vid.pause() });
+    // tocar no cartão: ele afunda (sente o dedo) e levanta de novo com mola, e o link é copiado
+    a.addEventListener('pointerdown', function () { a.animate([{ transform: 'scale(1) translateY(0)' }, { transform: 'scale(.9) translateY(8px)' }], { duration: 140, easing: 'ease-out', fill: 'forwards' }) });
+    function levanta() { a.getAnimations().forEach(function (x) { x.cancel() }); a.animate([{ transform: 'scale(.9) translateY(8px)' }, { transform: 'scale(1.05) translateY(-6px)', offset: .45 }, { transform: 'scale(.98) translateY(1px)', offset: .75 }, { transform: 'scale(1) translateY(0)' }], { duration: 520, easing: 'cubic-bezier(.3,.7,.4,1)' }) }
+    a.addEventListener('pointerup', levanta); a.addEventListener('pointercancel', levanta); a.addEventListener('pointerleave', function (e) { if (e.buttons) levanta() });
+    a.addEventListener('click', function () { copia(v.url, a) });
+    a.addEventListener('contextmenu', function (e) { e.preventDefault(); copia(v.url, a) });
+    return a;
+  }
+  function carrega() {
+    api().then(function (r) { return r.json() }).then(function (lista) {
+      grid.innerHTML = ''; (lista || []).forEach(function (v, i) { grid.appendChild(cartao(v, i)) });
+      document.getElementById('count').textContent = (lista || []).length + ' vídeos';
+    }).catch(function () { document.getElementById('count').textContent = 'não consegui carregar os vídeos' });
+  }
+  carrega();
+
+  // enviar: pelo botão ou arrastando os vídeos para a página
+  var inp = document.getElementById('arquivos');
+  document.getElementById('enviar').onclick = function () { inp.click() };
+  inp.onchange = function () { envia([].slice.call(inp.files)); inp.value = '' };
+  var soltar = document.getElementById('soltar');
+  addEventListener('dragover', function (e) { e.preventDefault(); soltar.classList.add('on') });
+  addEventListener('dragleave', function (e) { if (!e.relatedTarget) soltar.classList.remove('on') });
+  addEventListener('drop', function (e) { e.preventDefault(); soltar.classList.remove('on'); envia([].slice.call(e.dataTransfer.files || []).filter(function (f) { return /^video\//.test(f.type) })) });
+  function envia(fs) {
+    fs.reduce(function (fila, f) {
+      return fila.then(function () {
+        var c = document.createElement('div'); c.className = 'card subindo'; c.innerHTML = '<div class="cover">enviando…</div><div class="meta"><div class="name"></div><div class="sub"></div></div><div class="barra"><i></i></div>';
+        c.querySelector('.name').textContent = f.name.replace(/\.[^.]+$/, ''); c.querySelector('.sub').textContent = mb(f.size); grid.insertBefore(c, grid.firstChild);
+        return api({ method: 'POST', body: JSON.stringify({ nome: f.name, tipo: f.type || 'video/mp4' }) }).then(function (r) { return r.json() }).then(function (j) {
+          if (!j.envio) throw 0;
+          return new Promise(function (ok, erro) {
+            var x = new XMLHttpRequest(); x.open('PUT', j.envio); x.setRequestHeader('Content-Type', j.tipo);
+            x.upload.onprogress = function (p) { if (p.lengthComputable) c.querySelector('.barra i').style.width = Math.round(p.loaded / p.total * 100) + '%' };
+            x.onload = function () { x.status < 300 ? ok() : erro() }; x.onerror = erro; x.send(f);
+          });
+        }).then(function () { c.remove() }).catch(function () { c.querySelector('.cover').textContent = 'não foi · tente de novo' });
+      });
+    }, Promise.resolve()).then(carrega);
+  }
+})();
+</script>
+<script src="assets/pwa.js"></script>
+<script src="assets/ponto.js"></script>
+<script src="assets/flutua.js"></script>
+</body>
+</html>

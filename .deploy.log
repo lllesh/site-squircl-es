@@ -1,0 +1,47 @@
+<claude-code-hint v="1" type="plugin" value="vercel@claude-plugins-official" />
+Vercel CLI 54.13.0 (Node.js 24.16.0)
+Retrieving project…
+Deploying umbigo/squircl.es
+Uploading [--------------------] (0.0B/128.2KB)
+Uploading [=======-------------] (48.0KB/128.2KB)
+Uploading [===========---------] (71.2KB/128.2KB)
+Uploading [================----] (103.2KB/128.2KB)
+Uploading [====================] (128.2KB/128.2KB)
+  Inspect     https://vercel.com/umbigo/squircl.es/3KpjuLr9kfRcSTdNyKG2R3TpRwNw
+▲ Production  https://squircl-faq2kph76-umbigo.vercel.app
+Building…
+Building…
+Running build in Washington, D.C., USA (East) – iad1
+Build machine configuration: 4 cores, 8 GB
+Retrieving list of deployment files...
+Previous build caches not available.
+Downloading 114 deployment files...
+Running "vercel build"
+Vercel CLI 60.1.3
+Build Completed in /vercel/output [278ms]
+Deploying outputs...
+[2K[1A[2K[G▲ Production  https://squircl-faq2kph76-umbigo.vercel.app
+Completing…
+▲ Aliased     https://squircl.es
+{
+  "status": "ok",
+  "deployment": {
+    "id": "dpl_3KpjuLr9kfRcSTdNyKG2R3TpRwNw",
+    "url": "https://squircl-faq2kph76-umbigo.vercel.app",
+    "inspectorUrl": "https://vercel.com/umbigo/squircl.es/3KpjuLr9kfRcSTdNyKG2R3TpRwNw",
+    "readyState": "READY",
+    "target": "production",
+    "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_3KpjuLr9kfRcSTdNyKG2R3TpRwNw"
+  },
+  "message": "Deployment squircl-faq2kph76-umbigo.vercel.app ready.",
+  "next": [
+    {
+      "command": "vercel inspect squircl-faq2kph76-umbigo.vercel.app --scope team_Vn4CEAmUCAviOZcoUMFiBec6",
+      "when": "Inspect deployment"
+    },
+    {
+      "command": "vercel deploy --prod --scope team_Vn4CEAmUCAviOZcoUMFiBec6",
+      "when": "Promote to production"
+    }
+  ]
+}
